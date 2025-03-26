@@ -13,7 +13,6 @@ JIVAS action wrapper for interfacing with the Nylas API for calendar management.
 - **Name:** `jivas/nylas_calendar_action`
 - **Author:** [V75 Inc.](https://v75inc.com/)
 - **Architype:** `NylasCalendarAction`
-- **Version:** `0.0.1`
 
 ## Meta Information
 
