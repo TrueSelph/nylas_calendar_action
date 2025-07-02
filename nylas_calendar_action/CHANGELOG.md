@@ -1,2 +1,2 @@
-## 0.0.1
-- Initialized package using jvcli
+# 0.1.0
+- Initialized package with documentation

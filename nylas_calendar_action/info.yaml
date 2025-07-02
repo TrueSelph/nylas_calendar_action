@@ -1,8 +1,8 @@
 package:
   name: jivas/nylas_calendar_action
   author: V75 Inc.
-  architype: NylasCalendarAction
-  version: 0.0.1
+  archetype: NylasCalendarAction
+  version: 0.1.0
   meta:
     title: Nylas Calendar Action
     description: Interfaces with nylas API.
@@ -11,6 +11,6 @@ package:
   config:
     singleton: true
   dependencies:
-    jivas: ^2.0.0
+    jivas: ~2.1.0
 
 

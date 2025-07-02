@@ -13,7 +13,6 @@ JIVAS action wrapper for interfacing with the Nylas API for calendar management.
 - **Name:** `jivas/nylas_calendar_action`
 - **Author:** [V75 Inc.](https://v75inc.com/)
 - **Architype:** `NylasCalendarAction`
-- **Version:** `0.0.1`
 
 ## Meta Information
 
@@ -27,10 +26,7 @@ JIVAS action wrapper for interfacing with the Nylas API for calendar management.
 
 ## Dependencies
 
-- **Jivas:** `^2.0.0`
-- **Pip:**
-  - `pytz`
-  - `requests`
+- **Jivas:** `^2.1.0`
 
 This package, developed by V75 Inc., provides a JIVAS action wrapper for the Nylas API, enabling seamless calendar management and scheduling. As a core action, it simplifies interactions with calendar data. The package is a singleton and requires the Jivas library version 2.0.0.
 
@@ -163,4 +159,4 @@ response = nylas_calendar_action.delete_event(
 
 ## 🎗 License
 
-This project is protected under the Apache License 2.0. See [LICENSE](../LICENSE) for more information.
+This project is protected under the Apache License 2.0. See [LICENSE](./LICENSE) for more information.
