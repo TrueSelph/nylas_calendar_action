@@ -11,7 +11,7 @@ import from jivas.agent.action.action { Action }
 
 
 node NylasCalendarAction(Action) {
-    # finds availabilies and schedules appointments on calendars
+    # finds availabilities and schedules appointments on calendars
 
     # set up logger
     static has logger:Logger = logging.getLogger(__name__);
@@ -53,7 +53,7 @@ node NylasCalendarAction(Action) {
 
     def get_available_times(start_time: str, base_url:str, duration: int, cal_email:str, calendar_id:str, end_time: str="", bearer_token:str="", date_format:str="%Y-%m-%d %H:%M:%S") -> list {
         url = base_url + "/calendars/availability";
-        #checks for availablity for a 3 day period
+        #checks for availability for a 3 day period
         if(not end_time){
             time_after = 3;
             period = "days";
@@ -200,8 +200,8 @@ node NylasCalendarAction(Action) {
             input_tz = pytz.timezone(timezone);
 
             # Parse the date string into a datetime object
-            time_strp = datetime.strptime(time, date_format);
-            localized_time = input_tz.localize(time_strp);
+            time_strip = datetime.strptime(time, date_format);
+            localized_time = input_tz.localize(time_strip);
 
             # Convert to UTC
             utc_time = localized_time.astimezone(pytz.utc);
@@ -266,9 +266,9 @@ node NylasCalendarAction(Action) {
     }
 
     def round_up_time(time:str, date_format:str = "%Y-%m-%d %H:%M:%S") -> str{
-        time_strp = datetime.strptime(time, date_format);
+        time_strip = datetime.strptime(time, date_format);
         # Rounds up to next half hour by adding 30 minutes to current hour
-        new_time = time_strp.replace(second=0, minute=0, hour=time_strp.hour) + timedelta(minutes=((time_strp.minute//30)+1)*30);
+        new_time = time_strip.replace(second=0, minute=0, hour=time_strip.hour) + timedelta(minutes=((time_strip.minute//30)+1)*30);
         formatted_new_time = new_time.strftime(date_format);
         return formatted_new_time;
     }
@@ -287,7 +287,7 @@ node NylasCalendarAction(Action) {
             ) {
                 # Validate the 'open_hours' structure
                 if (type(self.open_hours) == list && len(self.open_hours) > 0) {
-                    # Required subkeys for each open_hours entry
+                    # Required sub keys for each open_hours entry
                     required_keys = ["days", "timezone", "start", "end"];
 
                     for _entry in self.open_hours {
