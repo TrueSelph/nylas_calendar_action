@@ -2,9 +2,9 @@ import json;
 import logging;
 import traceback;
 import from datetime { datetime, timedelta }
-import time; 
-import pytz; 
-import requests; 
+import time;
+import pytz;
+import requests;
 import from logging {Logger}
 import from jivas.agent.modules.agentlib.utils { Utils }
 import from jivas.agent.action.action { Action }
@@ -59,14 +59,14 @@ node NylasCalendarAction(Action) {
             period = "days";
             end_time = self.find_time_after_duration(start_time, period, time_after);
         }
-        
+
         epoch_start_time = self.convert_to_epoch(start_time);
         epoch_end_time = self.convert_to_epoch(end_time);
 
         search_details = {
             "participants": [
                 {
-                    "email": cal_email, 
+                    "email": cal_email,
                     "calendar_ids": [calendar_id]
                 }
             ],
@@ -103,7 +103,7 @@ node NylasCalendarAction(Action) {
                     break;
                 }
             }
-        }    
+        }
         return times;
     }
 
@@ -165,7 +165,7 @@ node NylasCalendarAction(Action) {
         };
         response = requests.request("DELETE", url, headers=headers, data=payload);
 
-        return (response.text);        
+        return (response.text);
     }
 
     def get_all_events(grant_url:str, calendar_id:str, bearer_token:str) -> dict{
@@ -211,7 +211,7 @@ node NylasCalendarAction(Action) {
 
             return epoch_time;
         }
-        
+
         except Exception{
             return 0;
         }
@@ -236,7 +236,7 @@ node NylasCalendarAction(Action) {
             elif period == "weeks"{
                 end_time = start_time + timedelta(weeks=duration);
             }
-            formatted_end_time = end_time.strftime(date_format);  
+            formatted_end_time = end_time.strftime(date_format);
             return formatted_end_time;
         }
         except Exception{
@@ -295,7 +295,7 @@ node NylasCalendarAction(Action) {
                         if (type(_entry) != dict) {
                             return False;  # Entry is not a dictionary
                         }
-                        
+
                         # Ensure all required keys are present
                         for key in required_keys {
                             if (key not in _entry) {
