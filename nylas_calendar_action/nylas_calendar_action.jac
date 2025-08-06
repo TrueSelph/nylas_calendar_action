@@ -6,7 +6,6 @@ import time;
 import pytz;
 import requests;
 import from logging {Logger}
-import from jivas.agent.modules.agentlib.utils { Utils }
 import from jivas.agent.action.action { Action }
 
 
