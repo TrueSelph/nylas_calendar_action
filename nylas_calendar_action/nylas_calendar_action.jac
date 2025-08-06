@@ -1,15 +1,16 @@
-import:py json;
-import:py logging;
-import:py traceback;
-import:py from datetime { datetime, timedelta }
-import:py pytz;
-import:py requests;
-import:py from logging {Logger}
-import:jac from jivas.agent.action.action { Action }
+import json;
+import logging;
+import traceback;
+import from datetime { datetime, timedelta }
+import time;
+import pytz;
+import requests;
+import from logging {Logger}
+import from jivas.agent.action.action { Action }
 
 
-node NylasCalendarAction :Action: {
-    # finds availabilies and schedules appointments on calendars
+node NylasCalendarAction(Action) {
+    # finds availabilities and schedules appointments on calendars
 
     # set up logger
     static has logger:Logger = logging.getLogger(__name__);
@@ -49,9 +50,9 @@ node NylasCalendarAction :Action: {
     ];
 
 
-    can get_available_times(start_time: str, base_url:str, duration: int, cal_email:str, calendar_id:str, end_time: str="", bearer_token:str="", date_format:str="%Y-%m-%d %H:%M:%S") -> list {
+    def get_available_times(start_time: str, base_url:str, duration: int, cal_email:str, calendar_id:str, end_time: str="", bearer_token:str="", date_format:str="%Y-%m-%d %H:%M:%S") -> list {
         url = base_url + "/calendars/availability";
-        #checks for availablity for a 3 day period
+        #checks for availability for a 3 day period
         if(not end_time){
             time_after = 3;
             period = "days";
@@ -105,7 +106,7 @@ node NylasCalendarAction :Action: {
         return times;
     }
 
-    can create_event(start_time:str, grant_url:str, duration:int, purpose:str, calendar_id:str, user_name:str, email:str, bearer_token:str="", location:str="Georgetown", timezone:str="America/Guyana") -> dict {
+    def create_event(start_time:str, grant_url:str, duration:int, purpose:str, calendar_id:str, user_name:str, email:str, bearer_token:str="", location:str="Georgetown", timezone:str="America/Guyana") -> dict {
         url = grant_url + "/events?calendar_id=" + calendar_id;
 
         period = "minutes";
@@ -154,7 +155,7 @@ node NylasCalendarAction :Action: {
         return event;
     }
 
-    can delete_event(grant_url:str, calendar_id:str, event_id:str, bearer_token:str) -> str{
+    def delete_event(grant_url:str, calendar_id:str, event_id:str, bearer_token:str) -> str{
         url = grant_url + "/events/" + event_id + "?notify_participants=true&calendar_id=" + calendar_id;
         payload:dict = {};
         headers = {
@@ -166,7 +167,7 @@ node NylasCalendarAction :Action: {
         return (response.text);
     }
 
-    can get_all_events(grant_url:str, calendar_id:str, bearer_token:str) -> dict{
+    def get_all_events(grant_url:str, calendar_id:str, bearer_token:str) -> dict{
         url = self.grant_url + "/events?limit=50&calendar_id=" + self.calendar_id;
         payload:dict = {};
         headers = {
@@ -178,7 +179,7 @@ node NylasCalendarAction :Action: {
         return response.json();
     }
 
-    can get_event(grant_url:str, calendar_id:str, event_id:str , bearer_token:str) -> str{
+    def get_event(grant_url:str, calendar_id:str, event_id:str , bearer_token:str) -> str{
         bearer_token = "Bearer " + self.nylas_api_key;
         url = grant_url + "/events/" + event_id + "?calendar_id=" + calendar_id;
         payload: dict[str, str] = {};
@@ -192,14 +193,14 @@ node NylasCalendarAction :Action: {
         return response.json();
     }
 
-    can convert_to_epoch(time:str, timezone:str = "America/Guyana", date_format:str = "%Y-%m-%d %H:%M:%S") -> int{
+    def convert_to_epoch(time:str, timezone:str = "America/Guyana", date_format:str = "%Y-%m-%d %H:%M:%S") -> int{
         try{
             # Create a timezone object based on the provided timezone_str
             input_tz = pytz.timezone(timezone);
 
             # Parse the date string into a datetime object
-            time_strp = datetime.strptime(time, date_format);
-            localized_time = input_tz.localize(time_strp);
+            time_strip = datetime.strptime(time, date_format);
+            localized_time = input_tz.localize(time_strip);
 
             # Convert to UTC
             utc_time = localized_time.astimezone(pytz.utc);
@@ -215,7 +216,7 @@ node NylasCalendarAction :Action: {
         }
     }
 
-    can find_time_after_duration(time:str, period:str, duration:int, date_format:str = "%Y-%m-%d %H:%M:%S") -> str{
+    def find_time_after_duration(time:str, period:str, duration:int, date_format:str = "%Y-%m-%d %H:%M:%S") -> str{
         # returns the time after a specified duration
         try{
             start_time = datetime.strptime(time, date_format);
@@ -242,7 +243,7 @@ node NylasCalendarAction :Action: {
         }
     }
 
-    can convert_timestamp(epoch_timestamp:int, timezone:str = "America/Guyana", date_format:str = "%Y-%m-%d %H:%M:%S") -> str{
+    def convert_timestamp(epoch_timestamp:int, timezone:str = "America/Guyana", date_format:str = "%Y-%m-%d %H:%M:%S") -> str{
         try{
             # Create a timezone object based on the provided timezone_str
             tz = pytz.timezone(timezone);
@@ -263,15 +264,15 @@ node NylasCalendarAction :Action: {
         }
     }
 
-    can round_up_time(time:str, date_format:str = "%Y-%m-%d %H:%M:%S") -> str{
-        time_strp = datetime.strptime(time, date_format);
+    def round_up_time(time:str, date_format:str = "%Y-%m-%d %H:%M:%S") -> str{
+        time_strip = datetime.strptime(time, date_format);
         # Rounds up to next half hour by adding 30 minutes to current hour
-        new_time = time_strp.replace(second=0, minute=0, hour=time_strp.hour) + timedelta(minutes=((time_strp.minute//30)+1)*30);
+        new_time = time_strip.replace(second=0, minute=0, hour=time_strip.hour) + timedelta(minutes=((time_strip.minute//30)+1)*30);
         formatted_new_time = new_time.strftime(date_format);
         return formatted_new_time;
     }
 
-        can healthcheck() -> bool {
+    def healthcheck() -> bool {
         try {
             if (self.prompt and
                 self.model_name and
@@ -285,7 +286,7 @@ node NylasCalendarAction :Action: {
             ) {
                 # Validate the 'open_hours' structure
                 if (type(self.open_hours) == list && len(self.open_hours) > 0) {
-                    # Required subkeys for each open_hours entry
+                    # Required sub keys for each open_hours entry
                     required_keys = ["days", "timezone", "start", "end"];
 
                     for _entry in self.open_hours {

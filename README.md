@@ -26,7 +26,7 @@ JIVAS action wrapper for interfacing with the Nylas API for calendar management.
 
 ## Dependencies
 
-- **Jivas:** `^2.0.0`
+- **Jivas:** `^2.1.0`
 
 This package, developed by V75 Inc., provides a JIVAS action wrapper for the Nylas API, enabling seamless calendar management and scheduling. As a core action, it simplifies interactions with calendar data. The package is a singleton and requires the Jivas library version 2.0.0.
 
